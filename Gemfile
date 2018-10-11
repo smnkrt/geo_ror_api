@@ -10,6 +10,7 @@ gem 'puma', '~> 3.11'
 gem 'dry-validation'
 
 group :development, :test do
+  gem 'dotenv-rails'
   gem 'pry-rails'
   gem 'rspec-rails'
 end
