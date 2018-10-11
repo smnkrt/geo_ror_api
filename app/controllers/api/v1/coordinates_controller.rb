@@ -18,6 +18,7 @@ module Api
       end
 
       def address_schema
+        # TODO: address format validation
         Dry::Validation.JSON { required(:address).filled(:str?) }
       end
 
