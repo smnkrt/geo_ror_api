@@ -6,11 +6,11 @@ module Api
       private
 
       def verify_token!
-        reply_with Api::UnauthorizedResponse.new if invalid_schema?
+        reply_with Api::UnauthorizedResponse.new unless valid_token?
       end
 
-      def invalid_schema?
-        token_schema.(params).failure?
+      def valid_token?
+        token_schema.(params).success?
       end
 
       def token_schema
