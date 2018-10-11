@@ -6,19 +6,21 @@ module Api
       private
 
       def verify_token!
-        reply_with Api::UnauthorizedResponse.new if token_schema.(params)
+        reply_with Api::UnauthorizedResponse.new if invalid_schema?
+      end
+
+      def invalid_schema?
+        token_schema.(params).failure?
       end
 
       def token_schema
-        Dry::Validation.JSON { required(:token).filled(:str?) }
+        Dry::Validation.JSON do
+          required(:token).filled(eql?: ENV['COORDS_API_TOKEN'])
+        end
       end
 
       def reply_with(response)
         render json: response.body.to_json, status: response.status
-      end
-
-      def api_token
-        ENV['COORDS_API_TOKEN']
       end
     end
   end
