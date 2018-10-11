@@ -27,12 +27,9 @@ describe Api::V1::CoordinatesController, type: :request do
     it_behaves_like 'responds with 401'
   end
 
-  xcontext 'blank address' do
-    it 'responds with 422' do
-      subject
-      expect(response.status).to eq(422)
-      expect(response.body).to eq({ error: 'unprocessable'}.to_json)
-    end
+  context 'blank address' do
+    let(:address) { nil }
+    it_behaves_like 'responds with 422'
   end
 
   xcontext 'invalid address' do
