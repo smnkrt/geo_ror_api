@@ -7,6 +7,8 @@ gem 'rails', '~> 5.2.1'
 gem 'sqlite3'
 gem 'puma', '~> 3.11'
 
+gem 'dry-validation'
+
 group :development, :test do
   gem 'pry-rails'
   gem 'rspec-rails'
