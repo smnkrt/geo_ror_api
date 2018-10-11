@@ -4,6 +4,7 @@ module Api
       before_action :verify_address!
 
       def fetch
+        reply_with coordinates_response
       end
 
       private
@@ -18,6 +19,18 @@ module Api
 
       def address_schema
         Dry::Validation.JSON { required(:address).filled(:str?) }
+      end
+
+      def coordinates_response
+        Api::BaseResponse.new(200, coordinates_for_address)
+      rescue CoordinatesForAddress::GatewayTimeoutError
+        Api::GatewayErrorResponse.new(504)
+      rescue CoordinatesForAddress::BadGatewayError
+        Api::GatewayErrorResponse.new(502)
+      end
+
+      def coordinates_for_address
+        CoordinatesForAddress.call(params[:address])
       end
     end
   end

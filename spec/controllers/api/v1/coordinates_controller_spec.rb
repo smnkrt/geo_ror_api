@@ -32,17 +32,50 @@ describe Api::V1::CoordinatesController, type: :request do
     it_behaves_like 'responds with 422'
   end
 
-  xcontext 'invalid address' do
-    it 'responds with 422' do
+  context '3rd party API timeout error' do
+    before do
+      expect(CoordinatesForAddress)
+        .to receive(:call)
+        .with(address)
+        .and_raise(CoordinatesForAddress::GatewayTimeoutError)
+    end
+
+    it 'responds with 504' do
       subject
-      expect(response.status).to eq(422)
-      expect(response.body).to eq({ error: 'unprocessable'}.to_json)
+      expect(response.status).to eq(504)
+      expect(response.body).to eq({ error: '3rd party service error'}.to_json)
     end
   end
 
-  context '3rd party api error' do
+  context '3rd party api response data format error' do
+    before do
+      expect(CoordinatesForAddress)
+        .to receive(:call)
+        .with(address)
+        .and_raise(CoordinatesForAddress::BadGatewayError)
+    end
+
+    it 'responds with 504' do
+      subject
+      expect(response.status).to eq(502)
+      expect(response.body).to eq({ error: '3rd party service error'}.to_json)
+    end
   end
 
   context 'happy path' do
+    let(:coords_data) { { lat: 20.0, lon: 30.0 } }
+
+    before do
+      expect(CoordinatesForAddress)
+        .to receive(:call)
+        .with(address)
+        .and_return(coords_data)
+    end
+
+    it 'responds with 200 and coordinates' do
+      subject
+      expect(response.status).to eq(200)
+      expect(response.body).to eq(coords_data.to_json)
+    end
   end
 end
