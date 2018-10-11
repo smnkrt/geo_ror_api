@@ -1,0 +1,13 @@
+{
+  "place_id": "151753950",
+  "licence": "© LocationIQ.com CC BY 4.0, Data © OpenStreetMap contributors, ODbL 1.0",
+  "osm_type": "way",
+  "osm_id": "326177489",
+  "boundingbox": ["55.8271777", "55.8276522", "12.3232143", "12.3238301"],
+  "lat": "55.82741265",
+  "lon": "12.3233875105124",
+  "display_name": "12, Farum Lillevang, Allerød Municipality, Capital Region of Denmark, Denmark",
+  "class": "landuse",
+  "type": "grass",
+  "importance": 0.41
+}
