@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe Api::UnprocessableResponse do
@@ -11,7 +13,7 @@ describe Api::UnprocessableResponse do
 
   describe '#body' do
     it 'returns body value' do
-      expect(subject.body).to eq({ error: 'unprocessable' })
+      expect(subject.body).to eq(error: 'unprocessable')
     end
   end
 end

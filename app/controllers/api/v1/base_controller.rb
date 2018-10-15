@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Api
   module V1
     class BaseController < ActionController::API
@@ -10,7 +12,7 @@ module Api
       end
 
       def valid_token?
-        token_schema.(params).success?
+        token_schema.call(params).success?
       end
 
       def token_schema

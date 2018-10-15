@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe Api::GatewayErrorResponse do
@@ -12,7 +14,7 @@ describe Api::GatewayErrorResponse do
 
   describe '#body' do
     it 'returns body value' do
-      expect(subject.body).to eq({ error: '3rd party service error' })
+      expect(subject.body).to eq(error: '3rd party service error')
     end
   end
 end

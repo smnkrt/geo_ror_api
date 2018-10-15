@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Api
   class GatewayErrorResponse < BaseResponse
     def initialize(status)

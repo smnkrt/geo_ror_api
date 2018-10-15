@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Api
   module V1
     module Coordinates
@@ -12,13 +14,14 @@ module Api
 
         def call
           return Api::UnprocessableResponse.new if address_missing?
+
           coordinates_response
         end
 
         private
 
         def address_missing?
-          address_schema.(@params).failure?
+          address_schema.call(@params).failure?
         end
 
         def address_schema

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe Api::UnauthorizedResponse do
@@ -11,7 +13,7 @@ describe Api::UnauthorizedResponse do
 
   describe '#body' do
     it 'returns body value' do
-      expect(subject.body).to eq({ error: 'unauthorized' })
+      expect(subject.body).to eq(error: 'unauthorized')
     end
   end
 end
