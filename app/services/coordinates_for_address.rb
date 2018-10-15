@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'net/http'
 
 class CoordinatesForAddress
@@ -13,7 +15,7 @@ class CoordinatesForAddress
   end
 
   def call
-    coordinates
+    coordinates_response
   rescue Timeout::Error
     raise GatewayTimeoutError
   rescue JSON::ParserError
@@ -22,15 +24,27 @@ class CoordinatesForAddress
 
   private
 
-  def coordinates
+  NUM_OF_DIGITS = 4
+  private_constant :NUM_OF_DIGITS
+
+  def coordinates_response
     res = result_data
-    { lat: Float(res['lat']), lon: Float(res['lon']) }
+    return res if res['error'].present?
+
+    { lat: coord(res['lat']), lon: coord(res['lon']) }
+  end
+
+  def coord(val)
+    Float(val).round(NUM_OF_DIGITS)
   end
 
   def result_data
-    return response_payload if response_payload.is_a?(Hash)
-    # NOTE: Select place with highest importance score as we want one result
+    return response_payload if single_result_response?
     response_payload.max_by { |e| e['importance'] }
+  end
+
+  def single_result_response?
+    response_payload.is_a?(Hash)
   end
 
   def response_payload

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 describe Api::V1::CoordinatesController, type: :request do
@@ -43,7 +45,7 @@ describe Api::V1::CoordinatesController, type: :request do
     it 'responds with 504' do
       subject
       expect(response.status).to eq(504)
-      expect(response.body).to eq({ error: '3rd party service error'}.to_json)
+      expect(response.body).to eq({ error: '3rd party service error' }.to_json)
     end
   end
 
@@ -58,7 +60,22 @@ describe Api::V1::CoordinatesController, type: :request do
     it 'responds with 504' do
       subject
       expect(response.status).to eq(502)
-      expect(response.body).to eq({ error: '3rd party service error'}.to_json)
+      expect(response.body).to eq({ error: '3rd party service error' }.to_json)
+    end
+  end
+
+  context 'when unable to geocode' do
+    let(:error_payload) { { error: 'Unable to geocode' } }
+    before do
+      expect(Net::HTTP)
+        .to receive(:get)
+        .and_return(error_payload.to_json)
+    end
+
+    it 'responds with 504' do
+      subject
+      expect(response.status).to eq(200)
+      expect(response.body).to eq(error_payload.to_json)
     end
   end
 

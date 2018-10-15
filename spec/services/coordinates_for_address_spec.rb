@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 describe CoordinatesForAddress do
@@ -31,8 +33,18 @@ describe CoordinatesForAddress do
     before { expect(Net::HTTP).to receive(:get).and_return(multiple_results) }
 
     it 'returns coordinates of the resuls with highest importance' do
-      expected = { lat: 55.82741265, lon: 12.3233875105124 }
+      expected = { lat: 55.8274, lon: 12.3234 }
       expect(subject).to eq(expected)
+    end
+  end
+
+  context 'unable to geocode' do
+    let(:error_payload) { { 'error' => 'Unable to geocode' } }
+
+    before { expect(Net::HTTP).to receive(:get).and_return(error_payload.to_json) }
+
+    it 'returns coordinates of the resuls with highest importance' do
+      expect(subject).to eq(error_payload)
     end
   end
 
@@ -42,7 +54,7 @@ describe CoordinatesForAddress do
     before { expect(Net::HTTP).to receive(:get).and_return(single_result) }
 
     it 'returns coordinates of the resuls with highest importance' do
-      expected = { lat: 55.82741265, lon: 12.3233875105124 }
+      expected = { lat: 55.8274, lon: 12.3234 }
       expect(subject).to eq(expected)
     end
   end
